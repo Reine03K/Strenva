@@ -1,16 +1,14 @@
 import React from 'react';
-import './Dashboard.css';
+import { Outlet } from 'react-router-dom';
 
-const Dashboard = () => {
+function Dashboard() {
   return (
-    <div className="dashboard">
-      <div className="dashboard-container">
-        <h1>Dashboard</h1>
-        <p>Welcome to your dashboard. Your profile and content will appear here.</p>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      <h1 className="text-2xl font-semibold mb-6">Tableau de bord</h1>
+      <p className="mb-6 text-slate-700">Bienvenue sur votre tableau de bord.</p>
+      <Outlet />
     </div>
   );
-};
+}
 
 export default Dashboard;
-

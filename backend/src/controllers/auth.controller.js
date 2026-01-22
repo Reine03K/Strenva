@@ -1,8 +1,8 @@
 const User = require('../models/User');
 const Student = require('../models/Student');
-const Alumni = require('../models/Alumni');
-const Teacher = require('../models/Teacher');
-const Company = require('../models/Company');
+const workers= require('../models/workers');
+const visitors = require('../models/Visitors');
+
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -24,15 +24,13 @@ exports.register = async (req, res) => {
       case 'student':
         profile = await Student.create({ userId: user._id, ...profileData });
         break;
-      case 'alumni':
-        profile = await Alumni.create({ userId: user._id, ...profileData });
+      case 'workers':
+        profile = await workers.create({ userId: user._id, ...profileData });
         break;
-      case 'teacher':
-        profile = await Teacher.create({ userId: user._id, ...profileData });
+      case 'visitors':
+        profile = await visitors.create({ userId: user._id, ...profileData });
         break;
-      case 'company':
-        profile = await Company.create({ userId: user._id, ...profileData });
-        break;
+    
     }
 
     // Generate token
@@ -98,14 +96,11 @@ exports.getMe = async (req, res) => {
       case 'student':
         profile = await Student.findOne({ userId: user._id });
         break;
-      case 'alumni':
-        profile = await Alumni.findOne({ userId: user._id });
+      case 'workers':
+        profile = await workers.findOne({ userId: user._id });
         break;
-      case 'teacher':
-        profile = await Teacher.findOne({ userId: user._id });
-        break;
-      case 'company':
-        profile = await Company.findOne({ userId: user._id });
+      case 'visitors':
+        profile = await visitors.findOne({ userId: user._id });
         break;
     }
 

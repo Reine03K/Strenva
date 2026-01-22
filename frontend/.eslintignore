@@ -1,0 +1,7 @@
+# ESLint ignore entries
+# (no ignores currently)
+
+# Ignore corrupted home view files while we clean/restore them
+src/views/HomePage.js
+src/views/HomePage.js.bak
+src/views/HomePage_new.js
