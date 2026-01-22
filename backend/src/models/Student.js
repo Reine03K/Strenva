@@ -27,15 +27,15 @@ const studentSchema = new mongoose.Schema({
   },
   icamCampus: {
     type: String,
-    required: true
+    required: false
   },
   currentLevel: {
     type: String,
-    required: true
+    required: false
   },
   specialization: {
     type: String,
-    required: true
+    required: false
   },
   skills: [{
     name: String,

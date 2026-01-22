@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const type = searchParams.get('type') || 'icam';
 
   const [formData, setFormData] = useState({
     email: '',
@@ -44,6 +42,18 @@ export default function RegisterPage() {
         [name]: ''
       }));
     }
+    
+    // Clear profile field errors
+    if (name.startsWith('profile.')) {
+      const errorKey = name;
+      if (errors[errorKey]) {
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[errorKey];
+          return newErrors;
+        });
+      }
+    }
   };
 
   const validateForm = () => {
@@ -69,6 +79,19 @@ export default function RegisterPage() {
       newErrors.role = 'Please select your role';
     }
 
+    // Validate profile fields
+    if (!formData.profileData.firstName) {
+      newErrors['profile.firstName'] = 'First name is required';
+    }
+
+    if (!formData.profileData.lastName) {
+      newErrors['profile.lastName'] = 'Last name is required';
+    }
+
+    if (!formData.profileData.city) {
+      newErrors['profile.city'] = 'City is required';
+    }
+
     return newErrors;
   };
 
@@ -86,7 +109,7 @@ export default function RegisterPage() {
     try {
       const { confirmPassword, ...submitData } = formData;
       const response = await api.post('/auth/register', submitData);
-      const { token, user } = response.data;
+      const { token } = response.data;
 
       // Store token
       localStorage.setItem('token', token);
@@ -151,6 +174,63 @@ export default function RegisterPage() {
               {errors.role && <p className="mt-1 text-sm text-red-500">{errors.role}</p>}
             </div>
           )}
+
+          {/* First Name */}
+          <div>
+            <label htmlFor="profile.firstName" className="block text-sm font-medium text-slate-700 mb-2">
+              First Name
+            </label>
+            <input
+              id="profile.firstName"
+              name="profile.firstName"
+              type="text"
+              value={formData.profileData.firstName || ''}
+              onChange={handleChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition ${
+                errors['profile.firstName'] ? 'border-red-500' : 'border-slate-300'
+              }`}
+              placeholder="John"
+            />
+            {errors['profile.firstName'] && <p className="mt-1 text-sm text-red-500">{errors['profile.firstName']}</p>}
+          </div>
+
+          {/* Last Name */}
+          <div>
+            <label htmlFor="profile.lastName" className="block text-sm font-medium text-slate-700 mb-2">
+              Last Name
+            </label>
+            <input
+              id="profile.lastName"
+              name="profile.lastName"
+              type="text"
+              value={formData.profileData.lastName || ''}
+              onChange={handleChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition ${
+                errors['profile.lastName'] ? 'border-red-500' : 'border-slate-300'
+              }`}
+              placeholder="Doe"
+            />
+            {errors['profile.lastName'] && <p className="mt-1 text-sm text-red-500">{errors['profile.lastName']}</p>}
+          </div>
+
+          {/* City */}
+          <div>
+            <label htmlFor="profile.city" className="block text-sm font-medium text-slate-700 mb-2">
+              City
+            </label>
+            <input
+              id="profile.city"
+              name="profile.city"
+              type="text"
+              value={formData.profileData.city || ''}
+              onChange={handleChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition ${
+                errors['profile.city'] ? 'border-red-500' : 'border-slate-300'
+              }`}
+              placeholder="Paris"
+            />
+            {errors['profile.city'] && <p className="mt-1 text-sm text-red-500">{errors['profile.city']}</p>}
+          </div>
 
           {/* Email */}
           <div>
