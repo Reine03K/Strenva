@@ -1,73 +1,47 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
 
-// Créer le contexte d'authentification
+// Create authentication context
 const AuthContext = createContext();
 
-// Fournisseur d'authentification
+// Auth provider
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Charger l'utilisateur depuis localStorage au démarrage
+  // Load user from token on startup
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        console.error('Erreur chargement utilisateur:', e);
-        localStorage.removeItem('user');
-      }
+    const loadUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await api.get('/auth/me');
+          setUser(response.data.user);
+        } catch (error) {
+          console.error('Error loading user:', error);
+          localStorage.removeItem('token');
+        }
     }
     setLoading(false);
+    };
+
+    loadUser();
   }, []);
 
-  // Fonction de login
+  // Login function
   const login = (userData) => {
-    const userWithDefaults = {
-      ...userData,
-      completedTasks: userData.completedTasks || {},
-      alerts: userData.alerts || []
-    };
-    setUser(userWithDefaults);
-    localStorage.setItem('user', JSON.stringify(userWithDefaults));
+    setUser(userData);
   };
 
-  // Fonction de logout
+  // Logout function
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
-  // Fonction pour mettre à jour l'utilisateur
+  // Update user function
   const updateUser = (updates) => {
-    const updatedUser = { ...user, ...updates };
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-  };
-
-  // Fonction pour marquer une tâche comme complétée
-  const markTaskComplete = (procedure, taskId) => {
-    const updatedCompletedTasks = {
-      ...user.completedTasks,
-      [procedure]: {
-        ...(user.completedTasks[procedure] || {}),
-        [taskId]: true
-      }
-    };
-    updateUser({ completedTasks: updatedCompletedTasks });
-  };
-
-  // Fonction pour marquer une tâche comme non complétée
-  const markTaskIncomplete = (procedure, taskId) => {
-    const updatedCompletedTasks = {
-      ...user.completedTasks,
-      [procedure]: {
-        ...(user.completedTasks[procedure] || {}),
-        [taskId]: false
-      }
-    };
-    updateUser({ completedTasks: updatedCompletedTasks });
+    setUser(prev => ({ ...prev, ...updates }));
   };
 
   return (
@@ -76,20 +50,18 @@ export function AuthProvider({ children }) {
       login, 
       logout, 
       updateUser, 
-      loading,
-      markTaskComplete,
-      markTaskIncomplete
+      loading
     }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Hook personnalisé pour utiliser le contexte
+// Custom hook to use auth context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth doit être utilisé avec AuthProvider');
+    throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
 }

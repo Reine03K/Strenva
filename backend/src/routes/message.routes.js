@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const {
+  getMessages,
+  sendMessage,
+  markAsRead
+} = require('../controllers/message.controller');
+const { protect } = require('../middleware/auth.middleware');
 
-// Placeholder routes - to be implemented
-router.get('/', (req, res) => {
-  res.json({ message: 'Message routes' });
-});
+router.get('/', protect, getMessages);
+router.post('/', protect, sendMessage);
+router.put('/:id/read', protect, markAsRead);
 
 module.exports = router;
 

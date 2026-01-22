@@ -41,27 +41,27 @@ function LandingPage() {
       {/* 4 INFO CARDS */}
       <section className="grid gap-4 md:grid-cols-4 text-xs">
         <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-2">
-          <h3 className="font-semibold text-slate-900">Administrative procedures</h3>
+          <h3 className="font-semibold text-slate-900">Smart Matching</h3>
           <p className="text-slate-600">
-            A guided journey through every key step: visa, residence permit, social security, CAF, and more.
+            Platform automatically selects 3-5 candidates matching your job requirements.
           </p>
         </div>
         <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-2">
-          <h3 className="font-semibold text-slate-900">Find housing</h3>
+          <h3 className="font-semibold text-slate-900">Practical Testing</h3>
           <p className="text-slate-600">
-            Accès aux bonnes plateformes selon votre profil et votre budget.
+            Validated tests with 2-day deadline to assess candidates' real-world skills.
           </p>
         </div>
         <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-2">
-          <h3 className="font-semibold text-slate-900">Food & Groceries</h3>
+          <h3 className="font-semibold text-slate-900">Secure Communication</h3>
           <p className="text-slate-600">
-           Local essentials: markets, supermarkets, and nearby shops.
+            Chat and video calls for seamless collaboration between companies and talents.
           </p>
         </div>
         <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-2">
-          <h3 className="font-semibold text-slate-900">Jobs / Internships / Apprenticeships</h3>
+          <h3 className="font-semibold text-slate-900">Verified Profiles</h3>
           <p className="text-slate-600">
-            Find opportunities that match your profile and skills.
+            All Icam talents have verified skills and validated experiences.
           </p>
         </div>
       </section>

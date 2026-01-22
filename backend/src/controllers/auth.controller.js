@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const Student = require('../models/Student');
-const workers= require('../models/workers');
-const visitors = require('../models/Visitors');
+const Worker = require('../models/Worker');
+const Refugee = require('../models/Refugee');
 
 
 // Register a new user
@@ -25,12 +25,13 @@ exports.register = async (req, res) => {
         profile = await Student.create({ userId: user._id, ...profileData });
         break;
       case 'workers':
-        profile = await workers.create({ userId: user._id, ...profileData });
+        profile = await Worker.create({ userId: user._id, ...profileData });
         break;
-      case 'visitors':
-        profile = await visitors.create({ userId: user._id, ...profileData });
+      case 'refugees':
+        profile = await Refugee.create({ userId: user._id, ...profileData });
         break;
-    
+      default:
+        return res.status(400).json({ message: 'Invalid role' });
     }
 
     // Generate token
@@ -97,10 +98,10 @@ exports.getMe = async (req, res) => {
         profile = await Student.findOne({ userId: user._id });
         break;
       case 'workers':
-        profile = await workers.findOne({ userId: user._id });
+        profile = await Worker.findOne({ userId: user._id });
         break;
-      case 'visitors':
-        profile = await visitors.findOne({ userId: user._id });
+      case 'refugees':
+        profile = await Refugee.findOne({ userId: user._id });
         break;
     }
 

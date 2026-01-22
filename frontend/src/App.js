@@ -10,33 +10,38 @@ import { AuthProvider } from './context/AuthContext';
 import MainLayout from './layouts/MainLayout';
 
 // Views
-import HomePageFixed from './views/HomePageFixed';
+import HomePage from './views/HomePage';
 import LandingPage from './views/LandingPage';
 import LoginPage from './views/LoginPage';
+import RegisterPage from './views/RegisterPage';
 
-// Dashboards from pages
-import StudentDashboard from './pages/StudentDashboard';
-import WorkerDashboard from './pages/WorkerDashboard';
-import RefugeeDashboard from './pages/RefugeeDashboard';
-import VisitorDashboard from './pages/VisitorDashboard';
+// Dashboards
+import StudentDashboard from './views/StudentDashboard';
+import WorkerDashboard from './views/WorkerDashboard';
+import RefugeeDashboard from './views/RefugeeDashboard';
 
-// Procedures pages
-import AdministrativePage from './pages/AdministrativePage';
-import HousingPage from './pages/HousingPage';
-import GroceriesPage from './pages/GroceriesPage';
-import JobsPage from './pages/JobsPage';
-import LeisurePage from './pages/LeisurePage';
-import TransportPage from './pages/TransportPage';
-import TransportCityDetail from './pages/TransportCityDetail';
-import ProcedureDetail from './pages/ProcedureDetail';
+// Protected Route Component
+import ProtectedRoute from './components/ProtectedRoute';
 
-// Refugee Checklists
-import RefugeeAdministrativeChecklist from './components/checklists/refugee/AdministrativeChecklist';
-import RefugeeHousingChecklist from './components/checklists/refugee/HousingChecklist';
-import RefugeeFoodChecklist from './components/checklists/refugee/FoodChecklist';
-import RefugeeHealthChecklist from './components/checklists/refugee/HealthChecklist';
-import RefugeeLearningChecklist from './components/checklists/refugee/LearningChecklist';
-import RefugeeJobsChecklist from './components/checklists/refugee/JobsChecklist';
+// Job Pages
+import JobListPage from './views/JobListPage';
+import JobDetailPage from './views/JobDetailPage';
+import CreateJobPage from './views/CreateJobPage';
+
+// Profile Pages
+import ProfilePage from './views/ProfilePage';
+import EditProfilePage from './views/EditProfilePage';
+
+// Application Pages
+import ApplicationsPage from './views/ApplicationsPage';
+import ApplicationDetailPage from './views/ApplicationDetailPage';
+
+// Test Pages
+import TestPage from './views/TestPage';
+
+// Message Pages
+import MessagesPage from './views/MessagesPage';
+import ChatPage from './views/ChatPage';
 
 function App() {
   return (
@@ -44,75 +49,111 @@ function App() {
       <AuthProvider>
         <MainLayout>
           <Routes>
-            {/* Home & Auth */}
-            <Route path="/" element={<HomePageFixed />} />
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/jobs" element={<JobListPage />} />
+            <Route path="/jobs/:id" element={<JobDetailPage />} />
 
-            {/* Dashboards */}
-            <Route path="/student/dashboard" element={<StudentDashboard />} />
-            <Route path="/worker/dashboard" element={<WorkerDashboard />} />
-            <Route path="/refugee/dashboard" element={<RefugeeDashboard />} />
-            <Route path="/visitor/dashboard" element={<VisitorDashboard />} />
+            {/* Protected Routes */}
+            <Route
+              path="/student/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <StudentDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/worker/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['workers']}>
+                  <WorkerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/refugee/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['refugees']}>
+                  <RefugeeDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/create"
+              element={
+                <ProtectedRoute>
+                  <CreateJobPage />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Generic Procedures Pages */}
-            <Route path="/administrative" element={<AdministrativePage />} />
-            <Route path="/housing" element={<HousingPage />} />
-            <Route path="/groceries" element={<GroceriesPage />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/leisure" element={<LeisurePage />} />
-            <Route path="/transport" element={<TransportPage />} />
-            <Route path="/transport/:city" element={<TransportCityDetail />} />
+            {/* Protected Routes - Profile */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <ProtectedRoute>
+                  <EditProfilePage />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Student Routes */}
-            <Route path="/student/procedures/administrative" element={<ProcedureDetail />} />
-            <Route path="/student/procedures/housing" element={<ProcedureDetail />} />
-            <Route path="/student/procedures/jobs" element={<ProcedureDetail />} />
-            <Route path="/student/procedures/benefits" element={<ProcedureDetail />} />
-            <Route path="/student/procedures/food" element={<ProcedureDetail />} />
-            <Route path="/student/procedures/leisure" element={<ProcedureDetail />} />
-            <Route path="/student/procedures/more" element={<ProcedureDetail />} />
+            {/* Protected Routes - Applications */}
+            <Route
+              path="/applications"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'workers']}>
+                  <ApplicationsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/applications/:id"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'workers']}>
+                  <ApplicationDetailPage />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Worker Routes */}
-            <Route path="/worker/procedures/administrative" element={<ProcedureDetail />} />
-            <Route path="/worker/procedures/housing" element={<ProcedureDetail />} />
-            <Route path="/worker/procedures/benefits" element={<ProcedureDetail />} />
-            <Route path="/worker/procedures/food" element={<ProcedureDetail />} />
-            <Route path="/worker/procedures/leisure" element={<ProcedureDetail />} />
-            <Route path="/worker/procedures/more" element={<ProcedureDetail />} />
+            {/* Protected Routes - Tests */}
+            <Route
+              path="/tests/:id"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'workers']}>
+                  <TestPage />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Visitor Routes */}
-            <Route path="/visitor/procedures/temporary-housing" element={<ProcedureDetail />} />
-            <Route path="/visitor/procedures/restaurants" element={<ProcedureDetail />} />
-            <Route path="/visitor/procedures/administrative" element={<ProcedureDetail />} />
-            <Route path="/visitor/procedures/leisure" element={<ProcedureDetail />} />
-
-            {/* Refugee Checklists */}
-            <Route path="/refugee/administrative" element={<RefugeeAdministrativeChecklist />} />
-            <Route path="/refugee/housing" element={<RefugeeHousingChecklist />} />
-            <Route path="/refugee/food" element={<RefugeeFoodChecklist />} />
-            <Route path="/refugee/health" element={<RefugeeHealthChecklist />} />
-            <Route path="/refugee/learning" element={<RefugeeLearningChecklist />} />
-            <Route path="/refugee/jobs" element={<RefugeeJobsChecklist />} />
-
-            {/* Refugee Procedures Routes (aliases for dashboard navigation) */}
-            <Route path="/refugee/procedures/administrative" element={<RefugeeAdministrativeChecklist />} />
-            <Route path="/refugee/procedures/housing" element={<RefugeeHousingChecklist />} />
-            <Route path="/refugee/procedures/food" element={<RefugeeFoodChecklist />} />
-            <Route path="/refugee/procedures/health" element={<RefugeeHealthChecklist />} />
-            <Route path="/refugee/procedures/learning" element={<RefugeeLearningChecklist />} />
-            <Route path="/refugee/procedures/jobs" element={<RefugeeJobsChecklist />} />
-
-            {/* Legacy routes for compatibility */}
-            <Route path="/demo/refugee-administrative" element={<RefugeeAdministrativeChecklist />} />
-            <Route path="/demo/refugee-housing" element={<RefugeeHousingChecklist />} />
-            <Route path="/demo/refugee-food" element={<RefugeeFoodChecklist />} />
-            <Route path="/demo/refugee-health" element={<RefugeeHealthChecklist />} />
-            <Route path="/demo/refugee-learning" element={<RefugeeLearningChecklist />} />
-            <Route path="/demo/refugee-jobs" element={<RefugeeJobsChecklist />} />
-
-            {/* Generic procedure detail route */}
-            <Route path="/procedure/:id" element={<ProcedureDetail />} />
+            {/* Protected Routes - Messages */}
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <MessagesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages/:userId"
+              element={
+                <ProtectedRoute>
+                  <ChatPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

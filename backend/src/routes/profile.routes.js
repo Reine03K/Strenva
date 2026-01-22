@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const {
+  getMyProfile,
+  updateProfile,
+  getPublicProfile
+} = require('../controllers/profile.controller');
+const { protect } = require('../middleware/auth.middleware');
 
-// Placeholder routes - to be implemented
-router.get('/', (req, res) => {
-  res.json({ message: 'Profile routes' });
-});
+router.get('/me', protect, getMyProfile);
+router.put('/me', protect, updateProfile);
+router.get('/:role/:id', getPublicProfile);
 
 module.exports = router;
 

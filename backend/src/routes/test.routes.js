@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const {
+  getTest,
+  createTest,
+  validateTest
+} = require('../controllers/test.controller');
+const { protect, authorize } = require('../middleware/auth.middleware');
 
-// Placeholder routes - to be implemented
-router.get('/', (req, res) => {
-  res.json({ message: 'Test routes' });
-});
+router.get('/:id', protect, getTest);
+router.post('/', protect, createTest);
+router.put('/:id/validate', protect, validateTest);
 
 module.exports = router;
 
